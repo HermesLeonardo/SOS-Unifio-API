@@ -1,16 +1,21 @@
-const pool = require("../db");
+const pool = require("../config/db")
+const bcrypt = require('bcrypt');
 
 // Criar usuário (somente administrador)
 async function criarUsuario(req, res) {
+
   try {
     if (req.user.tipo !== "administrador") {
       return res.status(403).json({ message: "Acesso negado. Somente administradores podem criar usuários." });
     }
 
-    const { nome, email, senhaHash, tipo, matricula } = req.body;
+    const { nome, email, senha, tipo, matricula } = req.body;
+
+    const saltRounds = 10;
+    const senhaHash = await bcrypt.hash(senha, saltRounds);
 
     await pool.query(
-      "INSERT INTO tb01_usuario (a01_nome, a01_email, a01_senha_hash, a01_tipo_usuario, a01_matricula) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO tb01_usuario (a01_nome, a01_email, a01_senha_hash, a01_tipo_usuario_id, a01_matricula) VALUES (?, ?, ?, ?, ?)",
       [nome, email, senhaHash, tipo, matricula]
     );
 
@@ -59,3 +64,4 @@ async function deletarUsuario(req, res) {
 }
 
 module.exports = { criarUsuario, listarUsuarios, deletarUsuario };
+

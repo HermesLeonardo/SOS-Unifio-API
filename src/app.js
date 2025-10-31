@@ -1,9 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const usuarioRoutes = require('./routes/usuarioRoutes');
-const ocorrenciaRoutes = require('./routes/ocorrenciaRoutes');
-const triagemRoutes = require('./routes/triagemRoutes');
+const usuarioRoutes = require('./routes/usuarios.routes');
+const ocorrenciaRoutes = require('./routes/ocorrencias.routes');
+const triagemRoutes = require('./routes/triagens.routes');
 
 const app = express();
 app.use(bodyParser.json());

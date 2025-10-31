@@ -1,13 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { autenticar, autorizar } = require("../middleware/auth.middleware");
-const { criarUsuario, listarUsuarios, deletarUsuario } = require("../controllers/usuarios.controller");
+const { authMiddleware, authorizeRoles } = require("../middleware/auth.middleware");
+const usuariosController = require("../controllers/usuarios.controller");
 
+// Todas as rotas abaixo exigem autenticação
 router.use(authMiddleware);
 
-// Apenas admin pode mexer nos usuários
-router.post("/", usuariosController.criarUsuario);
-router.get("/", usuariosController.listarUsuarios);
-router.delete("/:id", usuariosController.deletarUsuario);
+// Criar usuário (somente administrador)
+router.post("/", authorizeRoles("administrador"), usuariosController.criarUsuario);
+
+// Listar usuários
+router.get("/", authorizeRoles("administrador"), usuariosController.listarUsuarios);
+
+// Desativar usuário
+router.delete("/:id", authorizeRoles("administrador"), usuariosController.deletarUsuario);
 
 module.exports = router;
