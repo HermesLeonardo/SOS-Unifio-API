@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../config/db")
 const { generateProtocol } = require('../helpers/generateProtocol');
 
 // Aluno abre ocorrência
@@ -13,9 +13,9 @@ async function abrirOcorrencia(req, res) {
       [usuarioId, localizacao, descricao]
     );
 
-    res.status(201).json({ msg: "Ocorrência aberta com sucesso!", id: result.insertId, protocolo});
+    res.status(201).json({ msg: "Ocorrência aberta com sucesso!", id: result.insertId, protocolo });
   } catch (err) {
-    console.error('Erro ao criar ocorrência:', error);
+    console.error('Erro ao criar ocorrência:', err);
     res.status(500).json({ message: 'Erro interno ao criar ocorrência.' });
   }
 }
@@ -46,19 +46,16 @@ async function listarOcorrenciasAbertas(req, res) {
   }
 }
 
-
-
-//Listar todas as ocorrências (data de abertura)
+// Listar todas as ocorrências (data de abertura)
 async function listarTodasOcorrencias(req, res) {
   try {
     const [rows] = await pool.query('SELECT * FROM tb02_ocorrencia ORDER BY a02_data_abertura DESC');
     res.status(200).json(rows);
-  } catch (error) {
-    console.error('Erro ao listar ocorrências:', error);
+  } catch (err) {
+    console.error('Erro ao listar ocorrências:', err);
     res.status(500).json({ message: 'Erro ao buscar ocorrências.' });
   }
 }
-
 
 module.exports = {
   abrirOcorrencia,

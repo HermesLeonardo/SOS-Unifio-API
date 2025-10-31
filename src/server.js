@@ -6,6 +6,7 @@ const ocorrenciasRoutes = require("./routes/ocorrencias.routes");
 const triagensRoutes = require("./routes/triagens.routes");
 const atendimentosRoutes = require("./routes/atendimentos.routes");
 const relatoriosRoutes = require("./routes/relatorios.routes");
+const usuariosRoutes = require("./routes/usuarios.routes");
 
 const app = express();
 const PORT = 3000;
@@ -15,10 +16,11 @@ app.use(express.json());
 
 //rotas
 app.use("/auth", authRoutes);
-app.use("/api/ocorrencias", ocorrenciasRoutes);
-app.use("/api/triagens", triagensRoutes);
-app.use("/api/atendimentos", atendimentosRoutes);
-app.use("/api/relatorios", relatoriosRoutes);
+app.use("/ocorrencias", ocorrenciasRoutes);
+app.use("/triagens", triagensRoutes);
+app.use("/atendimentos", atendimentosRoutes);
+app.use("/relatorios", relatoriosRoutes);
+app.use("/usuarios", usuariosRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
