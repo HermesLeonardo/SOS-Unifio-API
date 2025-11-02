@@ -11,12 +11,11 @@ exports.login = async (req, res) => {
   const { matricula, senha } = req.body;
 
   try {
-    // Verifica se o usuário existe
     const [rows] = await pool.query(
-      `SELECT u.*, a00_nome AS tipo_nome
-      FROM tb01_usuario u
-      JOIN tb00_tipo_usuario t ON u.a01_tipo_usuario_id = t.a00_id
-      WHERE u.a01_matricula = ? AND t.a000_ind_ativo = 1`,
+      `SELECT u.*, t.a00_nome AS tipo_nome
+       FROM tb01_usuario u
+       JOIN tb00_tipo_usuario t ON u.a01_tipo_usuario_id = t.a00_id
+       WHERE u.a01_matricula = ? AND t.a000_ind_ativo = 1`,
       [matricula]
     );
 
@@ -24,18 +23,19 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Matrícula ou senha inválida.' });
 
     const user = rows[0];
-
-    // Verifica a senha
     const senhaCorreta = await bcrypt.compare(senha, user.a01_senha_hash);
 
     if (!senhaCorreta)
       return res.status(401).json({ message: 'Matrícula ou senha inválida.' });
 
+    // Padroniza o tipo (em minúsculo)
+    const tipoPadronizado = user.tipo_nome.toLowerCase();
+
     // Gera token JWT
     const token = jwt.sign(
       {
         id: user.a01_id,
-        tipo: user.tipo_nome,
+        tipo: tipoPadronizado,
         nome: user.a01_nome,
       },
       SECRET_KEY,
@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
     res.status(200).json({
       message: 'Login realizado com sucesso',
       token,
-      usuario: { id: user.a01_id, nome: user.a01_nome, tipo: user.tipo_nome }
+      usuario: { id: user.a01_id, nome: user.a01_nome, tipo: tipoPadronizado }
     });
   } catch (error) {
     console.error('Erro no login:', error);

@@ -7,13 +7,14 @@ const triagemRoutes = require('./routes/triagens.routes');
 
 const app = express();
 app.use(bodyParser.json());
-
+app.use(express.json());
+  
 // Rotas principais
 app.use('/usuarios', usuarioRoutes);
 app.use('/ocorrencias', ocorrenciaRoutes);
 app.use('/triagens', triagemRoutes);
 
-const PORT = 3000;
+const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`🚑 Servidor rodando na porta ${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

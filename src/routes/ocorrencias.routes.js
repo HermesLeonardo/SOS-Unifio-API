@@ -16,4 +16,18 @@ router.get('/abertas', authorizeRoles('socorrista'), ocorrenciasController.lista
 // Brigadista e Admin
 router.get('/', authorizeRoles('administrador'), ocorrenciasController.listarTodasOcorrencias);
 
+// Locais disponiveis 
+router.get("/locais", ocorrenciasController.listarLocais);
+
+// Buscar ocorrências recentes
+router.get("/recentes", ocorrenciasController.getOcorrenciasRecentes);
+
+// Buscar resumo das ocorrências para os status do dashboard 
+router.get("/resumoDash", ocorrenciasController.getOcorrenciasResumo);
+
+// Buscar ocorrência por ID
+router.get("/:id", ocorrenciasController.getOcorrenciaById);
+
+
+
 module.exports = router;
