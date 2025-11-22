@@ -1,4 +1,5 @@
-const pool = require("../db");
+const pool = require("../config/db")
+
 
 // Socorrista aceita ocorrência (status → em_andamento)
 async function aceitarOcorrencia(req, res) {
