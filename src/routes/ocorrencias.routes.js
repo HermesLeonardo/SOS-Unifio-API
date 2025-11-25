@@ -25,8 +25,14 @@ router.get("/recentes", ocorrenciasController.getOcorrenciasRecentes);
 // Buscar resumo das ocorrências para os status do dashboard 
 router.get("/resumoDash", ocorrenciasController.getOcorrenciasResumo);
 
+// Listar ocorrências ativas para a tela de active-occurrences
+router.get("/ativas", authMiddleware, ocorrenciasController.listarOcorrenciasAtivas);
+
 // Buscar ocorrência por ID
 router.get("/:id", ocorrenciasController.getOcorrenciaById);
+
+// listar as ocorrencias de um socorrista
+router.get("/socorrista/minhas", authMiddleware, ocorrenciasController.listarOcorrenciasSocorrista);
 
 
 

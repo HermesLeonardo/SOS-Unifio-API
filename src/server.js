@@ -11,6 +11,7 @@ const triagensRoutes = require("./routes/triagens.routes");
 const atendimentosRoutes = require("./routes/atendimentos.routes");
 const relatoriosRoutes = require("./routes/relatorios.routes");
 const usuariosRoutes = require("./routes/usuarios.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 app.use(cors());
@@ -26,6 +27,7 @@ app.use("/triagens", triagensRoutes);
 app.use("/atendimentos", atendimentosRoutes);
 app.use("/relatorios", relatoriosRoutes);
 app.use("/usuarios", usuariosRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 const PORT = 5000;
 server.listen(PORT, () => {
