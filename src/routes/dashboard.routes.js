@@ -9,4 +9,8 @@ router.use(authMiddleware);
 // Dashboard geral
 router.get("/", dashboardController.getDashboard);
 
+// Histórico de ocorrências
+router.get("/historico", authMiddleware, dashboardController.getHistorico);
+
+
 module.exports = router;

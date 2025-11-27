@@ -122,6 +122,42 @@ async function getDashboard(req, res) {
   }
 }
 
+async function getHistorico(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const [rows] = await pool.query(`
+      SELECT 
+        o.a02_id,
+        o.a02_prioridade,
+        o.a02_classificacao_ocorrencia AS classificacao,
+        t.a02t_nome AS tipo_ocorrencia,
+        s.a02s_nome AS situacao,
+        o.a02_descricao AS descricao,
+        o.a02_data_abertura,
+        o.a02_data_finalizacao,
+        u.a01_nome AS usuario_nome,
+        u.a01_email AS usuario_email,
+        l.a02l_nome AS local_nome
+      FROM tb02_ocorrencia o
+      JOIN tb01_usuario u ON u.a01_id = o.a02_usuario_id
+      JOIN tb02_local_ocorrencia l ON l.a02l_id = o.a02_local_ocorrencia_id
+      JOIN tb02_situacao_ocorrencia s ON s.a02s_id = o.a02_situacao_ocorrencia_id
+      JOIN tb02_tipo_ocorrencia t ON t.a02t_id = o.a02_tipo_ocorrencia_id
+      LEFT JOIN tb04_atribuicao a ON a.a04_ocorrencia_id = o.a02_id
+      WHERE o.a02_situacao_ocorrencia_id = 4
+      ORDER BY o.a02_data_abertura DESC;
+    `);
+
+    res.json(rows);
+
+  } catch (err) {
+    console.error("Erro ao buscar histórico:", err);
+    res.status(500).json({ message: "Erro ao carregar histórico." });
+  }
+}
+
 module.exports = {
-  getDashboard
+  getDashboard,
+  getHistorico
 };
